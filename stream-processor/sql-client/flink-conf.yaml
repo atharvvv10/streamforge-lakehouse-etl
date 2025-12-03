@@ -1,0 +1,15 @@
+control.plane.rpc.host: flink-master-svc
+web.ui.api.port: 8099
+internal.data.port: 6100
+internal.query.port: 6101
+high.availability.state.storage: rocksdb
+rocksdb.incremental.snapshots.enabled: true
+checkpoint.storage.mechanism: org.apache.flink.runtime.state.filesystem.FsStateBackend
+checkpoint.storage.path: s3://flink-backup-bucket/checkpoints
+class.loader.precedence: parent-first
+job.archive.cleanup.enabled: false
+job.archive.lifetime: 72h
+network.client.max.payload.bytes: 335544320
+network.task.backoff.max.ms: 240000ms
+internal.heartbeat.interval.ms: 600000
+akka.rpc.request.timeout: 120 seconds
