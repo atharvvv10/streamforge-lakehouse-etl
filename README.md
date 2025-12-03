@@ -198,11 +198,11 @@ The orchestrator.yml acts as your blueprint.
 Pull requests are welcome!
 Before submitting:
 
-Follow the folder/module structure
+- Follow the folder/module structure
 
-Add documentation when introducing new features
+- Add documentation when introducing new features
 
-Keep services decoupled
+- Keep services decoupled
 
 ## 📄 License
 
