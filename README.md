@@ -47,17 +47,30 @@ Infra-neutral → Works with local machine, cloud, containers, or Kubernetes
 ```bash
 streamforge-lakehouse-etl/
 │
-├── data-emitter/               → Scripts / services generating synthetic clickstream data
+├── data-emitter/
+│   ├── Dockerfile
+│   ├── producer.py
+│   └── requirements.txt
 │
-├── stream-processor/           → Real-time ETL via Apache Flink
+├── query-engine/
+│   └── iceberg.properties
 │
-├── query-engine/               → Trino configuration + connectors
+├── stream-processor/
+│   ├── sql-client/
+│   │   ├── Dockerfile
+│   │   └── flink-conf.yaml
+│   │
+│   └── sql-jobs/
+│       └── clickstream-filtering.sql
 │
-├── viz-dashboard/              → Superset setup for dashboards & charts
+├── viz-dashboard/
+│   ├── Dockerfile
+│   ├── superset_config.py
+│   └── superset-init.sh
 │
-├── orchestrator.yml            → Multi-service orchestration file
-│
-└── LICENSE                     → MIT open-source license
+├── orchestrator.yml
+├── LICENSE
+└── README.md
 ```
 ## ⚙️ Detailed Module Breakdown
 🟦 1. Data Emitter
