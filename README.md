@@ -1,119 +1,242 @@
-# 🚀 StreamForge Lakehouse ETL
-Modular, Scalable & Real-Time Lakehouse ETL Pipeline
+🌀 StreamForge Lakehouse ETL
+A Modular, Distributed, Real-Time Lakehouse ETL Architecture
 
-streamforge-lakehouse-etl is a fully modular ETL framework designed for building modern Lakehouse + Streaming Data Pipelines.
-Each component is decoupled into its own service so you can scale, replace, or extend parts independently — like a real production-grade data system.
+StreamForge Lakehouse ETL is a fully componentized data platform designed to simulate and demonstrate how modern real-time data systems work.
 
-## 🧱 Core Components Overview
-| **Core Component**    | **Role**                        | **Technology**      | **Implementation (New Name)** | **Function**                                                     |
-|------------------------|----------------------------------|----------------------|-------------------------------|------------------------------------------------------------------|
-| **Messaging Bus**      | Event Ingestion & Decoupling     | Apache Kafka         | `streaming-server`            | Decoupled, fault-tolerant ingestion of real-time events.         |
-| **Processing Layer**   | Stateful Stream Processing       | Apache Flink         | `stream-processor`            | Real-time ETL, filtering, transformation, and enrichment.        |
-| **Object Storage**     | Persistent Data Lake Storage     | MinIO                | `minio-storage-service`       | S3-compatible object storage for raw + processed datasets.       |
-| **Table Format**       | Lakehouse Table Management       | Apache Iceberg       | `iceberg-catalog-svc`         | Schema evolution + ACID transactions for lakehouse tables.       |
-| **SQL Access**         | Distributed Query Engine         | Trino                | `query-engine`                | High-performance SQL querying over Iceberg tables.               |
-| **Visualization**      | BI & Dashboarding               | Apache Superset      | `viz-dashboard`               | Interactive dashboards + visual analytics.                       |
-
-## 📦 Project Structure
-streamforge-lakehouse-etl/
-│
-├── data-emitter/           # Simulated or real data ingestion layer
-├── stream-processor/       # Real-time streaming ETL logic
-├── query-engine/           # SQL query engine configuration (Trino)
-├── viz-dashboard/          # Dashboarding & BI (Superset)
-├── orchestrator.yml        # Full system orchestration
-└── LICENSE                 # MIT License
-
-## 🎯 Objective
-
-To build a production-style data pipeline that supports:
+It is built using a Lakehouse + Streaming ETL philosophy:
 
 Real-time event ingestion
 
 Stateful stream processing
 
-Lakehouse-style storage & governance
+Object-storage-based lakehouse
 
-SQL analytics engine
+Table formats with ACID guarantees
 
-Dashboarding for insights
+Distributed SQL querying
 
-All packaged into clear, modular components.
+Dashboarding & analytics
 
-## ⚙️ Getting Started
-```bash
-1️⃣ Clone the Repository
+Everything is separated into independent modules, allowing clean scalability and a true production-like pipeline.
+
+🔥 Key Architectural Features
+
+True decoupling → Every service is isolated, replacing one does not affect others
+
+Real-time streaming → Kafka → Flink → MinIO → Iceberg
+
+Lakehouse governance → Iceberg ensures schema evolution + transactions
+
+High-performance analytics → Trino runs federated SQL over lakehouse
+
+Visual consumption layer → Superset connects directly to Trino
+
+Infra-neutral → Works with local machine, cloud, containers, or Kubernetes
+
+🧱 Core Component Matrix
+| **Component**         | **Role**                         | **Technology**       | **Service Name**              | **Detailed Function**                                                                                     |
+|------------------------|-----------------------------------|-----------------------|-------------------------------|-----------------------------------------------------------------------------------------------------------|
+| **Messaging Bus**      | Event ingestion / buffering       | Apache Kafka          | `streaming-server`            | Handles real-time clickstream ingestion with durability, replication, and consumer-group distribution.    |
+| **Processing Layer**   | Stateful stream ETL + enrichment  | Apache Flink          | `stream-processor`            | Performs transformations, filtering, joins, watermarking, windowing, and pushes results downstream.       |
+| **Object Storage**     | Central lakehouse data layer      | MinIO                 | `minio-storage-service`       | S3-compatible durable storage base for raw → bronze → silver → gold datasets.                            |
+| **Table Format**       | Governance + transactions         | Apache Iceberg        | `iceberg-catalog-svc`         | Adds ACID compliance, schema evolution, metadata tracking, partitioning & snapshot table management.      |
+| **Query Engine**       | Distributed SQL analytics         | Trino                 | `query-engine`                | Executes fast SQL queries across Iceberg tables with connector-based federation.                         |
+| **Visualization**      | Dashboards + BI                   | Apache Superset       | `viz-dashboard`               | Creates interactive dashboards, charts & analytics connected directly to Trino.                           |
+
+🏗️ High-Level Architecture Flow
+          ┌────────────────────┐
+          │   Data Emitter     │
+          │  (Clickstreams)    │
+          └─────────┬──────────┘
+                    ▼
+          ┌────────────────────┐
+          │   Kafka Broker     │
+          │ (streaming-server) │
+          └─────────┬──────────┘
+                    ▼
+          ┌────────────────────┐
+          │   Flink Processor  │
+          │  (ETL + Enrich)    │
+          └─────────┬──────────┘
+                    ▼
+        ┌──────────────────────────┐
+        │   MinIO Object Storage   │
+        │ (Lakehouse raw → curated)│
+        └──────────┬──────────────┘
+                   ▼
+        ┌──────────────────────────┐
+        │  Iceberg Table Catalog   │
+        │ (ACID + Schema + Metadata)│
+        └──────────┬──────────────┘
+                   ▼
+        ┌──────────────────────────┐
+        │         Trino            │
+        │ (Distributed SQL Engine) │
+        └──────────┬──────────────┘
+                   ▼
+        ┌──────────────────────────┐
+        │     Superset BI          │
+        │ (Dashboards & Analytics) │
+        └──────────────────────────┘
+
+📂 Repository Structure
+streamforge-lakehouse-etl/
+│
+├── data-emitter/               → Scripts / services generating synthetic clickstream data
+│
+├── stream-processor/           → Real-time ETL via Apache Flink
+│
+├── query-engine/               → Trino configuration + connectors
+│
+├── viz-dashboard/              → Superset setup for dashboards & charts
+│
+├── orchestrator.yml            → Multi-service orchestration file
+│
+└── LICENSE                     → MIT open-source license
+
+⚙️ Detailed Module Breakdown
+🟦 1. Data Emitter
+
+Simulates clickstreams, events, or logs.
+
+Produces events to Kafka topics
+
+Mimics user activity (page views, clicks, sessions)
+
+Configurable load generation
+
+Perfect for testing streaming workloads.
+
+🟧 2. Stream Processor (Flink)
+
+Handles real-time transformation:
+
+Parse → validate → clean → enrich
+
+Stateful computations
+
+Event time windowing
+
+Joins with side-input datasets
+
+Writes curated streams to MinIO/Iceberg
+
+🟨 3. MinIO (Data Lake Storage)
+
+Stores:
+
+Raw tier ("Bronze")
+
+Clean/curated tier ("Silver")
+
+Aggregated/reporting tier ("Gold")
+
+Fully S3-compatible — interchangeable with AWS S3.
+
+🟩 4. Iceberg Catalog
+
+Provides actual Lakehouse functionality:
+
+Versioned table snapshots
+
+Schema evolution without rewrites
+
+Partition spec evolution
+
+Rollbacks / time travel
+
+ACID transactions
+
+🟪 5. Trino Query Engine
+
+A distributed SQL engine used by:
+
+Analysts
+
+Dashboards
+
+BI tools
+
+Data scientists
+
+Supports ANSI SQL + Iceberg connector.
+
+🟫 6. Superset Dashboard
+
+Visualization layer where you:
+
+Build dashboards
+
+Run ad-hoc queries
+
+View real-time trend lines, KPIs
+
+Connect charts → Trino → Iceberg
+
+🚀 Getting Started
+1️⃣ Clone the repository
 git clone https://github.com/atharvvv10/streamforge-lakehouse-etl.git
 cd streamforge-lakehouse-etl
 
-2️⃣ Start Individual Modules
+2️⃣ Set up environment variables
 
-Each folder is self-contained.
-Typical workflow:
+(If required by MinIO, Iceberg, Trino)
 
-🔹 Start Kafka (streaming-server)
+3️⃣ Start services
 
-Produces and receives real-time clickstream/events.
+Depending on orchestration method:
 
-🔹 Start Flink (stream-processor)
+Docker Compose
 
-Applies ETL transforms, filtering, enrichment.
+Kubernetes
 
-🔹 Start MinIO + Iceberg
+Manual startup
 
-Acts as your object store & table catalog.
+The orchestrator.yml acts as your blueprint.
 
-🔹 Start Trino (query-engine)
+🧭 End-to-End Data Flow Example
 
-Allows you to query Iceberg tables using SQL.
+Emitter generates clickstream events
 
-🔹 Start Superset (viz-dashboard)
+Events go into Kafka
 
-Connects to Trino for dashboarding.
+Flink ETL transforms + enriches them
 
-All services can be controlled through orchestrator.yml.
-```
+Processed data lands in MinIO
 
-## 🧩 Why This Architecture?
+Iceberg tables track versions and schema
 
-🔄 Decoupled microservices → scalable & replaceable
+Trino performs SQL analytics
 
-⚡ Real-time ETL → immediate transformations
+Superset visualizes results
 
-🧊 Lakehouse support via Iceberg → ACID + schema evolution
+🛣️ Roadmap (Planned)
 
-🔍 Interactive SQL queries → Trino for fast analytics
+Kubernetes-native Helm charts
 
-📊 Dashboards → complete end-to-end visibility
+CI/CD automation for each module
 
-This mirrors real-world modern data engineering setups.
+Auto schema detection for Iceberg
 
-## 🛣️ Roadmap / Future Features
+Batch-layer integration (Spark)
 
-Support for Delta Lake or Apache Hudi
+Data quality checks (Great Expectations)
 
-Fully dockerized version
+ML feature-store extension
 
-CI/CD integration
+Alerts + monitoring module
 
-Automated schema registry
+🤝 Contributing
 
-Orchestrator upgrade (Airflow / Dagster)
+Pull requests are welcome!
+Before submitting:
 
-Machine learning feature-store layer
+Follow the folder/module structure
 
-## 🤝 Contributing
+Add documentation when introducing new features
 
-PRs are welcome!
+Keep services decoupled
 
-Fork
+📄 License
 
-Create feature branch
-
-Commit changes
-
-Open PR
-
-## 📄 License
-
-This project is licensed under the MIT License.
+MIT License — free for all personal, academic, and commercial use.
