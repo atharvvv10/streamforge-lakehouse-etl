@@ -1,133 +1,123 @@
-          🚀 STREAMFORGE ANALYTICS PLATFORM 🚀
-         REAL-TIME DATA LAKEHOUSE PIPELINE (2025)
-====================================================================
+🚀 StreamForge Analytics Platform
+Real-Time Data Lakehouse for High-Velocity Event Streams
+🎯 I. Objective & Architectural Overview
 
-I. 🎯 OBJECTIVE & ARCHITECTURE OVERVIEW
----------------------------------------
-StreamForge is a modern, real-time lakehouse designed for high-speed
-clickstream analytics. It integrates streaming ingestion, live ETL,
-S3-style storage, ACID tables, SQL querying, and dashboards.
+StreamForge is a modern, production-ready Real-Time Data Lakehouse engineered for continuous ingestion, low-latency streaming transformations, scalable object storage, and distributed analytics.
 
-────────────────────────────────────────────────────────────────────
-📦 CORE COMPONENTS (FULL BORDERED TABLE)
-────────────────────────────────────────────────────────────────────
-┌──────────────────────┬───────────────────┬───────────────────────────┬──────────────────────────────────────────┐
-│ Component            │ Technology        │ Service Name              │ Purpose                                  │
-├──────────────────────┼───────────────────┼───────────────────────────┼──────────────────────────────────────────┤
-│ Messaging Bus        │ Apache Kafka      │ streaming-server          │ High-throughput stream ingestion         │
-│ Processing Layer     │ Apache Flink      │ stream-processor          │ Stateful transformations + ETL           │
-│ Object Storage       │ MinIO             │ minio-storage-service     │ S3-compatible persistent storage         │
-│ Table Format         │ Apache Iceberg    │ iceberg-catalog-svc       │ Schema evolution + ACID tables           │
-│ SQL Query Engine     │ Trino             │ query-engine              │ Distributed SQL querying                 │
-│ Visualization        │ Apache Superset   │ viz-dashboard             │ Interactive dashboards                   │
-└──────────────────────┴───────────────────┴───────────────────────────┴──────────────────────────────────────────┘
-────────────────────────────────────────────────────────────────────
+Below is the fully bordered architecture table:
 
-====================================================================
++---------------------+-------------------+----------------------------+---------------------------------------------------------------+
+| Core Component      | Technology        | Service Name               | Purpose                                                       |
++---------------------+-------------------+----------------------------+---------------------------------------------------------------+
+| Messaging Bus       | Apache Kafka      | streaming-server           | High-throughput, persistent event ingestion                  |
+| Processing Layer    | Apache Flink      | stream-processor           | Stateful real-time ETL, filtering, enrichment                |
+| Object Storage      | MinIO             | minio-storage-service      | S3-compatible durable storage                                |
+| Table Format        | Apache Iceberg    | iceberg-catalog-svc        | ACID transactions, schema evolution, time travel             |
+| SQL Query Engine    | Trino             | query-engine               | Distributed SQL execution on top of Iceberg tables           |
+| Visualization Layer | Apache Superset   | viz-dashboard              | Dashboards, analytics exploration, BI capabilities           |
++---------------------+-------------------+----------------------------+---------------------------------------------------------------+
 
-II. 📂 PROJECT FILE STRUCTURE
------------------------------
+📂 II. Project File Structure
 streamforge-analytics/
+├── data-emitter/                 
+│   ├── stream_source.py
+│   ├── python_deps.txt
+│   └── Dockerfile
 │
-├── data-emitter/                     # 🔥 Clickstream generator
-│     ├── stream_source.py
-│     ├── python_deps.txt
-│     └── Dockerfile
+├── stream-processor/             
+│   ├── sql-client/
+│   │   ├── flink_runtime.yaml
+│   │   └── cli_builder.Dockerfile
+│   └── sql-jobs/
+│       └── transform_pipeline.sql
 │
-├── stream-processor/                 # ⚡ Flink SQL transformations
-│     ├── sql-client/
-│     │     ├── flink_runtime.yaml
-│     │     └── cli_builder.Dockerfile
-│     └── sql-jobs/
-│           └── transform_pipeline.sql
+├── query-engine/                 
+│   └── iceberg_catalog.properties
 │
-├── query-engine/                     # 🧊 Trino + Iceberg config
-│     └── iceberg_catalog.properties
+├── viz-dashboard/                
+│   ├── web_config.py
+│   ├── init_superuser.sh
+│   └── viz_app.docker
 │
-├── viz-dashboard/                    # 📊 Superset setup scripts
-│     ├── web_config.py
-│     ├── init_superuser.sh
-│     └── viz_app.docker
-│
-├── orchestrator.yml                  # 🐳 Docker Compose orchestrator
-└── COPYRIGHT.txt                     # 📄 MIT License
+├── orchestrator.yml              
+└── COPYRIGHT.txt                 
 
-====================================================================
+🛠️ III. Environment Setup
+Prerequisites
++------------------------+
+|   REQUIRED SOFTWARE    |
++------------------------+
+| Docker Desktop / Engine|
+| Docker Compose v2+     |
+| >= 16GB RAM recommended|
++------------------------+
 
-III. 🛠️ ENVIRONMENT SETUP
---------------------------
-
-📌 REQUIREMENTS:
-- Docker
-- Docker Compose v2+
-- Recommended: 16GB RAM
-
-────────────────────────────────────────────────────────────────────
-💻 INSTALLATION STEPS
-────────────────────────────────────────────────────────────────────
-
-👉 Step 1: Clone the repo
--------------------------
+1. Clone the Repository
 git clone <your-repo-url>
 cd streamforge-analytics
 
-👉 Step 2: Start the entire platform
------------------------------------
+2. Launch Entire Platform
 docker compose -f orchestrator.yml up --build -d
 
-====================================================================
+🌐 IV. Access Endpoints
++-------------------------+--------------------------+-------------------------------+-------------------------------+
+| Service                 | Container Name           | URL                           | Credentials                  |
++-------------------------+--------------------------+-------------------------------+-------------------------------+
+| Flink Job Manager UI    | stream-job-master        | http://localhost:8084         | None                         |
+| MinIO Console           | object-storage-svc       | http://localhost:9002         | minio-admin / minio-password-1|
+| Trino Web UI           | trino-query-server       | http://localhost:8889         | None                         |
+| Superset Dashboard      | data-visualization-app   | http://localhost:9099         | viz_master / superstrongpassword |
++-------------------------+--------------------------+-------------------------------+-------------------------------+
 
-IV. 🌐 SERVICE ENDPOINTS
-------------------------
+🌊 V. Data Processing Flow
+A. Event Generation — data-emitter/stream_source.py
++-------------------------------------------+
+|   STREAM EVENT TYPES GENERATED            |
++-------------------------------------------+
+| • Page Views                              |
+| • Product Clicks                          |
+| • Add-To-Cart Events                      |
+| • Checkout Initiation                     |
+| • Purchase Events                         |
++-------------------------------------------+
 
-────────────────────────────────────────────────────────────────────
-🌍 SERVICE ENDPOINT TABLE (FULL BORDER)
-────────────────────────────────────────────────────────────────────
-┌────────────────────────────┬──────────────────────────┬──────────────────────────────────────┬─────────────────────────────────────┐
-│ Service                    │ Container Name           │ URL                                  │ Credentials                         │
-├────────────────────────────┼──────────────────────────┼──────────────────────────────────────┼─────────────────────────────────────┤
-│ Flink Job Manager UI       │ stream-job-master        │ http://localhost:8084                │ None                                │
-│ MinIO Console              │ object-storage-svc       │ http://localhost:9002                │ minio-admin / minio-password-1      │
-│ Trino Web UI               │ trino-query-server       │ http://localhost:8889                │ None                                │
-│ Superset Dashboard         │ data-visualization-app   │ http://localhost:9099                │ viz_master / superstrongpassword     │
-└────────────────────────────┴──────────────────────────┴──────────────────────────────────────┴─────────────────────────────────────┘
-────────────────────────────────────────────────────────────────────
 
-====================================================================
+Synthetic JSON events → published to Kafka topic:
+user-activity-stream
 
-V. 🌊 DATA PROCESSING FLOW
---------------------------
+B. Real-Time ETL — Flink SQL
 
-A. 🔄 EVENT GENERATION
------------------------
-File: data-emitter/stream_source.py  
-- Emits synthetic clickstream events  
-- Outputs page-views, purchases, session metadata  
-- Publishes to Kafka: `user-activity-stream`
+Flink performs:
 
-B. ⚙️ REAL-TIME ETL via FLINK
-------------------------------
-File: stream-processor/sql-jobs/transform_pipeline.sql  
-Pipeline includes:
-- Read Kafka JSON stream  
-- Filter: successful purchases  
-- Condition: revenue > 50  
-- Sink: writes to Iceberg tables in MinIO  
++---------------------------------------------------------------+
+|                    FLINK ETL PIPELINE                        |
++---------------------------------------------------------------+
+| SOURCE: Kafka topic 'user-activity-stream'                    |
+| TRANSFORM: Filter purchases where transaction_value > 50      |
+| SINK: Write into Iceberg table (Avro format via MinIO)        |
++---------------------------------------------------------------+
 
-C. 🔍 QUERYING THE LAKEHOUSE
------------------------------
-Start Trino CLI:
+C. Querying Iceberg Tables (via Trino)
+
+Access Trino shell:
+
 docker compose -f orchestrator.yml exec query-engine trino --user analytics_user
 
+
 Run SQL:
+
 USE iceberg_data_lake.marketing_events;
-SELECT * FROM processed_conversions LIMIT 5;
 
-====================================================================
+SELECT *
+FROM processed_conversions
+LIMIT 5;
 
-VI. 📜 PROJECT METADATA
-------------------------
-License : MIT (see COPYRIGHT.txt)  
-Author  : © 2025 Atharv Chougale  
-Project : StreamForge Analytics Platform  
+📜 VI. Project Metadata
++----------------------+----------------------------------------+
+| Field                | Details                                |
++----------------------+----------------------------------------+
+| License              | MIT License (see COPYRIGHT.txt)        |
+| Author               | Atharv Chougale © 2025                 |
+| Project              | StreamForge Analytics Platform         |
++----------------------+----------------------------------------+
 
