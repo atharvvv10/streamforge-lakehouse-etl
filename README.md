@@ -154,6 +154,7 @@ Visualization layer where you:
 ## 🚀 Getting Started
 ```bash
 1️⃣ Clone the repository
+
 git clone https://github.com/atharvvv10/streamforge-lakehouse-etl.git
 cd streamforge-lakehouse-etl
 
