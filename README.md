@@ -44,6 +44,7 @@ Infra-neutral → Works with local machine, cloud, containers, or Kubernetes
 | **Visualization**      | Dashboards + BI                   | Apache Superset       | `viz-dashboard`               | Creates interactive dashboards, charts & analytics connected directly to Trino.                           |
 
 ## 📂 Repository Structure
+```bash
 streamforge-lakehouse-etl/
 │
 ├── data-emitter/               → Scripts / services generating synthetic clickstream data
@@ -57,7 +58,7 @@ streamforge-lakehouse-etl/
 ├── orchestrator.yml            → Multi-service orchestration file
 │
 └── LICENSE                     → MIT open-source license
-
+```
 ## ⚙️ Detailed Module Breakdown
 🟦 1. Data Emitter
 
